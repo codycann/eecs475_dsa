@@ -1,8 +1,6 @@
 #ifndef DSA_H
 #define DSA_H
 
-// TODO make these const refs
-// TODO add add a test function
 #include "uberzahl/uberzahl.h"
 
 /**
@@ -25,7 +23,7 @@ struct PublicKey {
 	 * FIPS 186-3 specifies L and N length pairs of (1024,160), (2048,224),
 	 * (2048,256), and (3072,256).
 	 */
-	PublicKey(const uberzahl& L, const uberzahl& N, uberzahl& x);
+	PublicKey(const mediumType L, const mediumType N, uberzahl& x);
 	uberzahl p;
 	uberzahl q;
 	uberzahl g;

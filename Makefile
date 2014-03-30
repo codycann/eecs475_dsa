@@ -20,7 +20,7 @@ DSA.o: DSA.cpp DSA.h uberzahl/uberzahl.h
 	$(CC) $(CFLAGS) $<
 
 uberzahl.o: uberzahl/uberzahl.cpp uberzahl/uberzahl.h
-	$(CC) $(CFLAGS) -w $<
+	$(CC) $(CFLAGS) $<
 
 .PHONY: clean
 clean:

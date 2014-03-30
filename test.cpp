@@ -1,10 +1,14 @@
 #include "DSA.h"
 #include "uberzahl/uberzahl.h"
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 
 
 int main(){
+	// seed randomness
+    srand(time(0));
+
 	// test internals of DSA (Montgomery, modexp, etc.)
 	testDSA();
 
