@@ -1,0 +1,119 @@
+#include <iostream>
+#include "uberzahl.h"
+using namespace std;
+
+uberzahl inverse(uberzahl x, uberzahl M){
+	uberzahl rtrn = 1;
+	while((rtrn*x)%M != 1){
+		rtrn=rtrn+1;
+	}
+	return rtrn;
+}
+
+uberzahl montyReduction(uberzahl T, uberzahl R, uberzahl M, uberzahl Mprime){
+	int temp = 0;
+	uberzahl zero = temp;
+	uberzahl m=(T*Mprime)&(R-1);
+	uberzahl t=(T+m*M)/R;
+	if(t>=M){
+		return t-M;
+	} else if(t>=zero){
+		return t;
+	} else {
+		return t+M;
+	}
+}
+
+uberzahl modExpMonty(uberzahl a, uberzahl b, uberzahl M){
+	uberzahl R=1;
+	int temp = 0;
+	uberzahl zero = temp;
+	while(R<=M){
+		R=R*2;
+	}
+	uberzahl Mprime=(R*inverse(R,M)-1)/M;
+	uberzahl aHat=(a*R)%M;
+	uberzahl rtrn=1;
+	while(b>zero){
+		if(b%2){
+			rtrn=montyReduction(aHat*rtrn,R,M,Mprime);
+			//rtrn=(a*rtrn)%M;
+		}
+		b=b>>1;
+		aHat=montyReduction(aHat*aHat,R,M,Mprime);
+		//a=(a*a)%M;
+	}
+	return rtrn;
+}
+
+int generateNums(uberzahl N, uberzahl L){
+	//generate q of bit size N
+	//generate p of bit size L s.t. q|p-1
+	uberzahl one = 1;
+	uberzahl p,q;
+	uberzahl a=(p-1)/q;
+	//calculate g (generator)
+	uberzahl g=1;
+	int count=2;
+	while(g==one){
+		g=modExpMonty(count,a,p);
+		count++;
+	}
+	//generate M for hashing
+	//generate x randomly 0<x<q
+	uberzahl x;
+	uberzahl y=modExpMonty(g,x,p);
+	return 0;
+}
+
+uberzahl Hash(uberzahl m, uberzahl M){
+	return modExpMonty(m,1,M);
+}
+
+int Signing(uberzahl p, uberzahl q, uberzahl g, uberzahl y, uberzahl x, uberzahl m, uberzahl M){
+	int temp = 0;
+	uberzahl zero = temp;
+	uberzahl r,r1,k,s;
+	do{
+		//generate random k s.t. 0<k<q
+		r1=modExpMonty(g,k,p);
+		r=modExpMonty(r1,1,q);
+	}
+	while(r == zero);
+
+	do{
+		s=modExpMonty(inverse(k,q)*(Hash(m,M)+x*r),1,q);
+	}
+	while(s == zero);
+
+	return 0;
+}
+
+bool Verifying(uberzahl r, uberzahl s, uberzahl p, uberzahl q, uberzahl g, uberzahl y, uberzahl m, uberzahl M){	
+	int temp = 0;
+	uberzahl zero = temp;
+	if(r<=zero || s<=zero || r>=q || s>=q){
+		return false;
+	}
+	uberzahl w=inverse(s,q);
+	uberzahl u_temp=modExpMonty(w,1,q);
+	uberzahl u1=Hash(m,M)*u_temp;
+	uberzahl u2=r*u_temp;
+	uberzahl v1=modExpMonty(g,u1,p);
+	uberzahl v2=modExpMonty(y,u2,p);
+	uberzahl v=modExpMonty(v1*v2,1,q);
+	if(v==r){
+		return true;
+	}
+	return false;
+}
+
+int main(){
+	
+	uberzahl a = 7;
+	uberzahl b = 2;
+	uberzahl n = 11;
+	cout << modExpMonty(a,b,n) << endl;
+
+	return 0;
+}
