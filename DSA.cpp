@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-const int kNumTests = 5;
+const mediumType kNumTests = 5;
 static const uberzahl zero ("0");
 
 static uberzahl montyReduction(uberzahl T, uberzahl R, uberzahl M, uberzahl Mprime);

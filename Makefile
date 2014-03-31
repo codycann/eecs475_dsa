@@ -13,13 +13,13 @@ default: $(RUNTESTS)
 $(RUNTESTS): $(OBJS)
 	$(LD) $(LFLAGS) $(OBJS) -o $@
 
-test.o: test.cpp DSA.h uberzahl/uberzahl.h
+test.o: test.cpp DSA.h uberzahl.h
 	$(CC) $(CFLAGS) $<
 
-DSA.o: DSA.cpp DSA.h uberzahl/uberzahl.h
+DSA.o: DSA.cpp DSA.h uberzahl.h
 	$(CC) $(CFLAGS) $<
 
-uberzahl.o: uberzahl/uberzahl.cpp uberzahl/uberzahl.h
+uberzahl.o: uberzahl.cpp uberzahl.h
 	$(CC) $(CFLAGS) $<
 
 .PHONY: clean

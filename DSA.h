@@ -1,7 +1,7 @@
 #ifndef DSA_H
 #define DSA_H
 
-#include "uberzahl/uberzahl.h"
+#include "uberzahl.h"
 
 /**
  * Convenience struct to allow us to pass around and return signatures

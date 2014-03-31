@@ -1,5 +1,5 @@
 #include "DSA.h"
-#include "uberzahl/uberzahl.h"
+#include "uberzahl.h"
 #include <iostream>
 #include <cstdlib>
 using namespace std;
@@ -11,6 +11,8 @@ int main(){
 
 	// test internals of DSA (Montgomery, modexp, etc.)
 	testDSA();
+
+	cout << nextprime("400000", 5) << endl;
 
 	// test signing and verification
 	uberzahl privateKey;
