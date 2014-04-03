@@ -1,0 +1,85 @@
+#include <iostream>
+#include <cstdlib>
+#include <time.h>
+#include <gmp.h>
+#include <chrono>
+#include <fstream>
+#include "string.h"
+#include <sstream>
+#include <math.h>
+#include <gmpxx.h>
+
+using namespace std;
+
+
+void getprime(unsigned int bitsp, int bitsq, mpz_t myprime, gmp_randstate_t state, mpz_t q);
+	
+		
+void getprime(unsigned int bitsp, int bitsq, mpz_t p, gmp_randstate_t state, mpz_t q)
+{	
+	
+
+	int qprime = 0;
+	int pprime;
+	while(qprime == 0)
+	{	
+		//this will run until q is determined to be prime
+		mpz_urandomb(q, state, bitsq);
+		qprime = mpz_probab_prime_p(q, 50);
+	}
+	mpz_t p_minus_one;
+	mpz_t temp2_p;
+	mpz_init(temp2_p);
+	mpz_init(p_minus_one);
+	//according to something I read online, mpz_mul_2exp can be used as a left shift
+	mpz_mul_2exp(p_minus_one, q, bitsp-bitsq);
+	size_t sizeofp = mpz_sizeinbase(p_minus_one, 2);
+	//basically loook for an appropriately sized p that's also prime
+	while(sizeofp == bitsp && !pprime)
+	{
+		//basically this will add 1 to (p-1) and check primality
+		mpz_add_ui(temp2_p, p_minus_one, 1);
+		pprime = mpz_probab_prime_p(temp2_p, 50);
+		if(pprime)
+		{
+			//YAYYYY
+			mpz_set(p, temp2_p);
+			cout << "prime found!!!!!" << endl;
+			cout << "p: ";
+			mpz_out_str(stdout,10, p);
+			cout << endl << "q: ";
+			mpz_out_str(stdout,10, q);
+			cout << endl;
+			return;
+		}
+		mpz_add(p_minus_one, p_minus_one, q);
+		sizeofp = mpz_sizeinbase(p_minus_one,2);
+	}
+	cout << "no prime found.... sorry try again =(" << endl;
+	
+	return;
+}
+
+
+int main()
+{
+	int L = 3072;
+	int N = 256;
+	mpz_t seed;
+	mpz_t p;
+	mpz_t q;
+	mpz_init(p);
+	mpz_init(q);
+	mpz_init(seed);
+	mpz_set_ui(seed, time(NULL));
+
+	gmp_randstate_t state;
+	gmp_randinit_default(state);
+	gmp_randseed(state, seed);
+	
+	getprime(L,N, p, state, q);
+	cout << "done!" << endl;
+
+return 0;
+}
+		
