@@ -6,9 +6,10 @@
 using namespace std;
 
 int main(void){
-	uberzahl m = 139762420523; //Test string in decimal
-	//string test = "6162630d0a"; //Test string in hex
+	//uberzahl m = 1397624205233; //Test string in decimal
+	//string test = "abc"; //Test string in hex
 	//uberzahl m = uberzahl(stoul(test, 0, 16));
+	uberzahl m = "";
 	uberzahl output = hash(m);
 	cout << output << "\n";
 	unsigned int bl = output.bitLength();

@@ -4,16 +4,12 @@
 #include <fstream>
 #include <string>
 using namespace std;
-
-//Should bit extraction and shifts be from 0 to 32 or 0 to 31
-//Lines 65, 70, 71, 89 and 92
-
+//POSSIBLE LOGICAL ERROR ON LINES 65-68
 
 //all addition must be mod 2^32
 uberzahl add(uberzahl x){
 	uberzahl mod = uberzahl(4294967296);
 	return (x % mod);
-
 }
 
 uberzahl hash(uberzahl m){
@@ -49,8 +45,9 @@ uberzahl hash(uberzahl m){
 	m = m << 1;
 	m.setBit(0);
 	//append k "0" bits
-	if(m.bitLength() < 448) k = 448 - m.bitLength();
-	else k = 960 - m.bitLength();
+	int msqSize = m.bitLength()%512;
+	if(msqSize < 448) k = 448 - msqSize;
+	else k = 960 - msqSize;
 	m = m << k;
 	//append message length in 64 bits
 	m = m << 64;
@@ -58,17 +55,23 @@ uberzahl hash(uberzahl m){
 
 //Process the message in successive 512-bit chucks
 	int chunks = m.bitLength()/512;
-	if(m.bitLength()%512 > 0) chunks++;
+	if(m.bitLength()%512 > 0) chunks++; //shouldn't execute if done correctly
 	for(int j = 0; j < chunks; j++){
-		uberzahl w[64];
+		uberzahl w[64] = "";
 		for(int i = 0; i < 16; i++){
-		w[i] = m.extract(j*512+i*32, j*512+i*32+32);
+		int start = j*512+i*32;
+		uberzahl ext = m.extract(start, start + 32);
+		w[i] = ext >> start; 
+		//Do the pieces come from the start or end of m?
+		//int end = m.bitLength() - (j*512+i*32);
+		//uberzahl ext = m.extract(end-32, end);
+		//w[i] = ext >> end -32; 
 		}
 
 		//Extend the first 16 words into the remaining 48 words of the message array
 		for(int i = 16; i <=63; i++){
-			uberzahl s0 = w[i-15].rotateRight(7, 0, 32) ^ w[i-15].rotateRight(18, 0, 32) ^ (w[i-15] << 3);
-			uberzahl s1 = w[i-2].rotateRight(17, 0, 32) ^ w[i-2].rotateRight(19, 0, 32) ^ (w[i-2] << 10);
+			uberzahl s0 = w[i-15].rotateRight(7, 0, 31) ^ w[i-15].rotateRight(18, 0, 31) ^ (w[i-15] >> 3);
+			uberzahl s1 = w[i-2].rotateRight(17, 0, 31) ^ w[i-2].rotateRight(19, 0, 31) ^ (w[i-2] >> 10);
 			w[i] = add(w[i-16] + s0 + w[i-7]+ s1);
 		}
 
@@ -86,10 +89,10 @@ uberzahl hash(uberzahl m){
 		for(int i = 0; i <= 63; i++){
 			uberzahl not_e = e; //create a "bitwise NOT e"
 			for(int k = 0; k < 32; k++) not_e.toggleBit(k);
-			uberzahl s1 =(e.rotateRight(6,0,32)) ^ (e.rotateRight(11, 0 ,32));
+			uberzahl s1 =(e.rotateRight(6,0,31)) ^ (e.rotateRight(11, 0 ,31)) ^ (e.rotateRight(25,0,22));
 			uberzahl ch = (e & f) ^ ((not_e) & g);
 			uberzahl temp1 = add(h + s1 + ch + array[i] + w[i]);
-			uberzahl s0 = (a.rotateRight(2,0,32)) ^ (a.rotateRight(13, 0 ,32));
+			uberzahl s0 = (a.rotateRight(2,0,31)) ^ (a.rotateRight(13, 0 ,31)) ^ (a.rotateRight(22,0,31));
 			uberzahl maj = (a & b) ^ (a & c) ^ (b & c);
 			uberzahl temp2 = add(s0 + maj);
 			h = g;
