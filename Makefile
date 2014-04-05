@@ -11,7 +11,7 @@ default: $(RUNTESTS)
 
 
 $(RUNTESTS): $(OBJS)
-	$(LD) $(LFLAGS) $(OBJS) -o $@
+	$(LD) $(LFLAGS) $(OBJS) -o $@ -lgmp -lgmpxx
 
 test.o: test.cpp DSA.h uberzahl.h
 	$(CC) $(CFLAGS) $<

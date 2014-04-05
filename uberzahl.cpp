@@ -21,7 +21,7 @@ uberzahl::uberzahl ( const char* number ){
   convert_to_numeric( number );
 }
 
-/*uberzahl::uberzahl(const mpz_class& number){
+uberzahl::uberzahl(const mpz_class& number){
 	mpz_class scale = mask+1;
 	mpz_class current = number;
 	while(current>0) {
@@ -29,7 +29,7 @@ uberzahl::uberzahl ( const char* number ){
 		value.push_back(t.get_ui());
 		current/=scale;
 	}
-}*/
+}
 
 uberzahl::uberzahl ( const uberzahl& number ){
   for ( size_t i=0; i < number.value.size(); ++i )

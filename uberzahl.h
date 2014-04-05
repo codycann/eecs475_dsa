@@ -4,7 +4,7 @@
 #include<string>
 #include<vector>
 #include<climits>
-//#include<gmpxx.h>
+#include<gmpxx.h>
 
 // CONFIGURATIONS :
 // smallType is used for storage -- uberzahl.value[i]
@@ -47,7 +47,7 @@ class uberzahl {
     uberzahl ( const char* );
     uberzahl ( largeType );
     uberzahl ( const uberzahl& );
-//    uberzahl( const mpz_class& );
+   uberzahl( const mpz_class& );
     const uberzahl& operator = ( const uberzahl& );
 
     // uses the rand function - to seed use srand (unsigned int seed);

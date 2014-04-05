@@ -2,6 +2,11 @@
 #define DSA_H
 
 #include "uberzahl.h"
+// #include <gmpxx.h>
+
+typedef unsigned int smallType;
+typedef unsigned long long mediumType;
+typedef unsigned long long largeType;
 
 /**
  * Convenience struct to allow us to pass around and return signatures
@@ -23,6 +28,7 @@ struct PublicKey {
 	 * FIPS 186-3 specifies L and N length pairs of (1024,160), (2048,224),
 	 * (2048,256), and (3072,256).
 	 */
+	PublicKey(uberzahl& x);
 	PublicKey(const mediumType L, const mediumType N, uberzahl& x);
 	uberzahl p;
 	uberzahl q;
