@@ -5,23 +5,19 @@
 #include <iostream>
 #include <gmpxx.h>
 #include <cassert>
-// #include <openssl/sha.h>
 using namespace std;
 
-// TODO increase to 50
-const mediumType kNumTests = 5;
+const mediumType kNumTests = 50;
 static const uberzahl zero ("0");
 static const uberzahl two ("2");
 
-static uberzahl montyReduction(uberzahl T, uberzahl R, uberzahl M, uberzahl Mprime, smallType RBitLength);
-static uberzahl modExpMonty(uberzahl a, uberzahl b, uberzahl M);
-// static uberzahl sha256(uberzahl m, uberzahl M);
+static uberzahl montyReduction(const uberzahl& T, const uberzahl& R, const uberzahl& M
+	, const uberzahl& Mprime, smallType RBitLength);
+static uberzahl modExpMonty(const uberzahl& a, uberzahl b, const uberzahl& M);
 static uberzahl getP(size_t bitsp, size_t bitsq, const mpz_class& q);
 static mpz_class getQ(size_t bitsq, gmp_randstate_t& state);
 static uberzahl getGen(const uberzahl& p, const uberzahl& q);
 
-
-// TODO const refs, PLEASE
 
 Signature sign(const PublicKey& pubKey, const uberzahl& x, const uberzahl& m) {
 	uberzahl r;
@@ -29,19 +25,13 @@ Signature sign(const PublicKey& pubKey, const uberzahl& x, const uberzahl& m) {
 	//generate random k s.t. 0<k<q
 	uberzahl k = random(zero, pubKey.q);
 	assert(zero < k && k < pubKey.q);
-	// cout << "k: " << k << endl;
 	
 	do{
-		// TODO this is slow. Problem?
-		// cout << "pubKey.g = " << pubKey.g << endl;
 		r = modExpMonty(pubKey.g,k,pubKey.p) % pubKey.q;
-		// cout << "r: " << r << endl;
 	} while(r == zero);
 
 	do{
 		s = k.inverse(pubKey.q)*(sha256(m,pubKey.N)+x*r) % pubKey.q;
-		// cout << endl << endl << "K-INVERSE " << k.inverse(pubKey.q) << endl << endl;
-		// cout << "s: " << s << endl;
 	}
 	while(s == zero);
 
@@ -90,22 +80,13 @@ void testDSA() {
 	mpz_class p ("157268907079531168571016512275475674236181708331762078770015447411320093224521865970960715151153217242695930676334665846553044765009240537953179281124914667342254259142255790779365698887745659659491312905252692164779532588148430300949015008133126102463547142916865889793094381651817076179816398730238778151123");
 	mpz_class ans;
 	mpz_powm(ans.get_mpz_t(), g.get_mpz_t(), k.get_mpz_t(), p.get_mpz_t());
-	// cout << ans << endl << endl;
-	// cout << ans % q << endl << endl;
-	// cout << modExpMonty(g, k, p) << endl << endl;
-	// cout << modExpMonty(g, k, p) % q<< endl;
+	cout << ans << endl << endl;
+	cout << ans % q << endl << endl;
+	cout << modExpMonty(g, k, p) << endl << endl;
+	cout << modExpMonty(g, k, p) % q<< endl;
 
-	// cout << "testDSA() over" << endl;
+	cout << "testDSA() over" << endl;
 
-}
-
-// for fast testing
-PublicKey::PublicKey(uberzahl& x)
-	: p ("151922796094617702893525465464802434266410100690351740282113590602668472872428967532578883964046372880303449703749959751435043967793536508977788065921707024729264249502471101743113063338218963644408273415835478279591089439839415199754387849538501285876473282325811196636754031408309235362687073645583188822031")
-	, q ("1235112995284249207516635239491827277563965299903")
-	, g ("65799697247778758509851377705700137107206282741829920291857468052498913055438332826497676193845143464393276736346787649341306709463027769032395857054341832424089152033800432895513182114939541824323105115664759033076750143109414617880141244374499045745310946620961036469371509417282316580888169263813743485518")
-{
-	x = random(zero, q);
 }
 
 PublicKey::PublicKey(const mediumType L, const mediumType N_, uberzahl& x)
@@ -120,7 +101,6 @@ PublicKey::PublicKey(const mediumType L, const mediumType N_, uberzahl& x)
 		//generate q of bit size N
 		mpz_class q_mpz = getQ(N, state);
 		q = q_mpz;
-		// cout << "q_mpz: " << q_mpz << endl;
 
 		//generate p of bit size L s.t. q|p-1
 		p = getP(L, N, q_mpz);
@@ -133,14 +113,9 @@ PublicKey::PublicKey(const mediumType L, const mediumType N_, uberzahl& x)
 	do {
 		x = random(zero, q);
 	} while(x == zero || x == q);
-	// cout <<endl <<  "X: "<< x << endl << endl;
+
 	// generate y
 	y = modExpMonty(g,x,p);
-
-	// cout << "P: " << p << endl;
-	// cout << "Q: " << q << endl;
-	// cout << "G: " << g << endl;
-	// cout << "G^Q mod P = " << modExpMonty(g, q, p) << endl;
 
 	// Things we pass
 	assert((uberzahl(1) << (L - 1)) < p && p < (uberzahl(1) << L));
@@ -153,10 +128,11 @@ PublicKey::PublicKey(const mediumType L, const mediumType N_, uberzahl& x)
 	assert(zero < x && x < q);
 	assert(y == g.expm(x, p));
 
-	// cout << "These values pass all requirements for the public key" << endl;
 }
 
-static uberzahl montyReduction(uberzahl T, uberzahl R, uberzahl M, uberzahl Mprime, smallType RBitLength){
+static uberzahl montyReduction(const uberzahl& T, const uberzahl& R, const uberzahl& M
+	, const uberzahl& Mprime, smallType RBitLength){
+
 	uberzahl m=(T*Mprime)&(R-1);
 	uberzahl t=(T+m*M) >> RBitLength; // if we use regular divide it's slow
 	if(t>=M){
@@ -168,16 +144,17 @@ static uberzahl montyReduction(uberzahl T, uberzahl R, uberzahl M, uberzahl Mpri
 	}
 }
 
-static uberzahl modExpMonty(uberzahl a, uberzahl b, uberzahl M){
-	uberzahl oldB (b);// TODO remove
+static uberzahl modExpMonty(const uberzahl& a, uberzahl b, const uberzahl& M) {
+	#ifndef NDEBUG
+	uberzahl oldB (b);
+	#endif
+
 	uberzahl R=1;
 	smallType RBitLength = 0;
 	while(R<=M){
-		// R=R*2;
 		R = R << 1;
 		++RBitLength;
 	}
-	// cout << "Done with R" << endl;
 	uberzahl Mprime=(R*R.inverse(M)-1)/M;
 	uberzahl aHat=(a*R)%M;
 	uberzahl rtrn=1;
@@ -188,28 +165,8 @@ static uberzahl modExpMonty(uberzahl a, uberzahl b, uberzahl M){
 		b=b>>1;
 		aHat=montyReduction(aHat*aHat,R,M,Mprime, RBitLength);
 	}
-
-	#ifndef NDEBUG
-	uberzahl correct = a.expm(oldB, M);
-	if(rtrn != correct) {
-		cout << "a: " << a << endl;
-		cout << "b: " << b << endl;
-		cout << "M: " << M << endl;
-		cout << "rtrn = " << rtrn << endl;
-		cout << "a.expm(b, M) = " << correct << endl;
-		assert(false);
-	}
-	#endif
 	return rtrn;
 }
-
-// // TODO what should this do? Is this correct?
-// static uberzahl sha256(uberzahl m, uberzahl M){
-// 	uberzahl retVal = "874821946267123792280058894950784228535709909184"; // SHA-1 of SNSD (160 bits)
-// 	// cout << "bitLength of retVal " << retVal.bitLength() << endl;
-// 	assert(retVal.bitLength() == 160);
-// 	return retVal;
-// }
 
 static mpz_class getQ(size_t bitsq, gmp_randstate_t& state) {
 	mpz_class minQ (1); // q must be > 2^(N - 1)
@@ -219,7 +176,6 @@ static mpz_class getQ(size_t bitsq, gmp_randstate_t& state) {
 	do {	
 		//this will run until q is determined to be prime and 2^(N-1) < q < 2^N
 		mpz_urandomb(q.get_mpz_t(), state, bitsq);
-		// cout << "randomly chose q = " << q << endl;
 	} while(!mpz_probab_prime_p(q.get_mpz_t(), kNumTests) || q < minQ);
 	return q;
 }
@@ -248,7 +204,6 @@ static uberzahl getGen(const uberzahl& p, const uberzahl& q) {
 		if(g != 1)
 			return g;
 		h = h + 1;
-		// cout << h << endl;
 	}
 	abort();
 	return uberzahl();

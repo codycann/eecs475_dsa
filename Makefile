@@ -7,10 +7,13 @@ LFLAGS = -pedantic -Wall
 OBJS = DSA.o test.o uberzahl.o hash.o
 RUNTESTS = runtests
 
-default: CFALGS +=  -O3 -NDEBUG
-default: $(RUNTESTS)
 
-debug: CFLAGS +=  -g
+all: speedy
+
+speedy: CFLAGS += -O3 -DNDEBUG
+speedy: $(RUNTESTS)
+
+debug: CFLAGS += -g
 debug: $(RUNTESTS)
 
 
