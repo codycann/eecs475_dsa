@@ -1,13 +1,17 @@
 CC = g++
 LD = g++
 
-CFLAGS = -c -Wall -g -std=c++98
+CFLAGS = -c -Wall -std=c++11
 LFLAGS = -pedantic -Wall
 
-OBJS = DSA.o test.o uberzahl.o
+OBJS = DSA.o test.o uberzahl.o hash.o
 RUNTESTS = runtests
 
+default: CFALGS +=  -O3 -NDEBUG
 default: $(RUNTESTS)
+
+debug: CFLAGS +=  -g
+debug: $(RUNTESTS)
 
 
 $(RUNTESTS): $(OBJS)
@@ -20,6 +24,9 @@ DSA.o: DSA.cpp DSA.h uberzahl.h
 	$(CC) $(CFLAGS) $<
 
 uberzahl.o: uberzahl.cpp uberzahl.h
+	$(CC) $(CFLAGS) $<
+
+hash.o: hash.cpp hash.h uberzahl.h
 	$(CC) $(CFLAGS) $<
 
 .PHONY: clean

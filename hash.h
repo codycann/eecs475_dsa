@@ -3,7 +3,6 @@
 
 #include "uberzahl.h"
 
-uberzahl add(uberzahl x);
-uberzahl hash(uberzahl m);
+uberzahl sha256(uberzahl m, mediumType N);
 
 #endif

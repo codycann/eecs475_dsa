@@ -1,18 +1,19 @@
+#include "hash.h"
 #include <iostream>
 #include <cstdlib>
-#include "hash.h"
 #include <fstream>
 #include <string>
+#include <cassert>
 using namespace std;
 //POSSIBLE LOGICAL ERROR ON LINES 65-68
 
 //all addition must be mod 2^32
-uberzahl add(uberzahl x){
+static uberzahl add(uberzahl x){
 	uberzahl mod = uberzahl(4294967296);
 	return (x % mod);
 }
 
-uberzahl hash(uberzahl m){
+uberzahl sha256(uberzahl m, mediumType N){
 //Initialize hash values:
 	uberzahl h0 = uberzahl(stoul("0x6a09e667", 0, 16));
 	uberzahl h1 = uberzahl(stoul("0xbb67ae85", 0, 16));
@@ -132,6 +133,8 @@ uberzahl hash(uberzahl m){
 	temp = temp | h6;
 	temp = temp << 32;
 	temp = temp | h7;
-	return temp;	 
+
+	// TODO what if N is bigger than 256?
+	return temp >> (256 - N);
 }
 

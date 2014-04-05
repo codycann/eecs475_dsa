@@ -28,6 +28,7 @@ struct PublicKey {
 	 * FIPS 186-3 specifies L and N length pairs of (1024,160), (2048,224),
 	 * (2048,256), and (3072,256).
 	 */
+	 // TODO remove
 	PublicKey(uberzahl& x);
 	PublicKey(const mediumType L, const mediumType N, uberzahl& x);
 	uberzahl p;
@@ -35,7 +36,7 @@ struct PublicKey {
 	uberzahl g;
 	uberzahl y;
 	// included for Montgomery optimization
-	uberzahl M;
+	mediumType N;
 };
 
 /**
