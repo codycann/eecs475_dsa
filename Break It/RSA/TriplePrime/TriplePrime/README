@@ -1,0 +1,24 @@
+RSA - Variable Prime Count
+
+PRIME_COUNT is located in rsa.h, to change the number of primes used change this value
+Default is Triple Prime RSA - per requirement by the spec
+
+To generate keys create a main function which calls rsa_key_gen( bitLength )
+Public and private information will be printed to standard out
+
+These values can be parsed in or simply copy + pasted into strings to be used
+in encryption decryption schemes (as seen in the current main.cpp)
+
+Otherwise there are essentially only two functions
+
+rsa_encrypt( message, exponent, prime list )
+rsa_decrypt( message, exponent, modulus )
+
+encryption is handled with montgomery multiplication by squaring
+decryption is handled with the chinese remainder theorem and montgomery multiplication
+
+ENJOY THE BEAUTY OF RSA!
+
+
+Compiling command
+g++ main.cpp uberzahl.cpp rsa.cpp -o output

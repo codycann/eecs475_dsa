@@ -1,0 +1,359 @@
+-------TEST VECTOR A-------
+Key: 1804289383
+Plaintext 123456789012345678
+genRoundKey after round 1: 906694364710971881062400
+genRoundKey after round 2: 906694364710971881095168
+genRoundKey after round 3: 906694364710971881127936
+genRoundKey after round 4: 906694364710971881160704
+genRoundKey after round 5: 906694364710971881193472
+genRoundKey after round 6: 906694364710971881226240
+genRoundKey after round 7: 906694364710971881259008
+genRoundKey after round 8: 906694364710971881291776
+genRoundKey after round 9: 906694364710971881324544
+genRoundKey after round 10: 906694364710971881357312
+genRoundKey after round 11: 906694364710971881390080
+genRoundKey after round 12: 906694364710971881422848
+genRoundKey after round 13: 906694364710971881455616
+genRoundKey after round 14: 906694364710971881488384
+genRoundKey after round 15: 906694364710971881521152
+genRoundKey after round 16: 906694364710971881553920
+genRoundKey after round 17: 906694364710971881586688
+genRoundKey after round 18: 906694364710971881619456
+genRoundKey after round 19: 906694364710971881652224
+genRoundKey after round 20: 906694364710971881684992
+genRoundKey after round 21: 906694364710971881717760
+genRoundKey after round 22: 906694364710971881750528
+genRoundKey after round 23: 906694364710971881783296
+genRoundKey after round 24: 906694364710971881816064
+genRoundKey after round 25: 906694364710971881848832
+genRoundKey after round 26: 906694364710971881881600
+genRoundKey after round 27: 906694364710971881914368
+genRoundKey after round 28: 906694364710971881947136
+genRoundKey after round 29: 906694364710971881979904
+genRoundKey after round 30: 906694364710971882012672
+genRoundKey after round 31: 906694364710971882045440
+genRoundKey after round 32: 906694364710971882078208
+-----------------------------------------
+
+ciphertext after AddRoundKey round 1: 123456789012322501
+ciphertext after sbox round 1: 14234445315997229888
+ciphertext after pLayer round 1: 13833026819637133988
+-----------------------------------------
+
+ciphertext after AddRoundKey round 2: 9221340801209746084
+ciphertext after sbox round 2: 15142021067319842553
+ciphertext after pLayer round 2: 9442794522074846699
+-----------------------------------------
+
+ciphertext after AddRoundKey round 3: 4831108503647458794
+ciphertext after sbox round 3: 11225284652612378655
+ciphertext after pLayer round 3: 17868351244512905443
+-----------------------------------------
+
+ciphertext after AddRoundKey round 4: 4033293189230741730
+ciphertext after sbox round 4: 13631945609846866710
+ciphertext after pLayer round 4: 15118688650672849062
+-----------------------------------------
+
+ciphertext after AddRoundKey round 5: 1283630595390685348
+ciphertext after sbox round 5: 6159801407673224441
+ciphertext after pLayer round 5: 1407358863983960675
+-----------------------------------------
+
+ciphertext after AddRoundKey round 6: 15242416919266124385
+ciphertext after sbox round 6: 8880295415503001253
+ciphertext after pLayer round 6: 5936470905312441705
+-----------------------------------------
+
+ciphertext after AddRoundKey round 7: 10548156923739829610
+ciphertext after sbox round 7: 16620228142638440623
+ciphertext after pLayer round 7: 12426515911194379969
+-----------------------------------------
+
+ciphertext after AddRoundKey round 8: 7814829892766992066
+ciphertext after sbox round 8: 11879228789568883270
+ciphertext after pLayer round 8: 13149505321007660384
+-----------------------------------------
+
+ciphertext after AddRoundKey round 9: 8537819302580272484
+ciphertext after sbox round 9: 15768412539106408361
+ciphertext after pLayer round 9: 16972858238461453389
+-----------------------------------------
+
+ciphertext after AddRoundKey round 10: 3137800183179289673
+ciphertext after sbox round 10: 7509904083616135582
+ciphertext after pLayer round 10: 6885865333159700478
+-----------------------------------------
+
+ciphertext after AddRoundKey round 11: 11497551351587088379
+ciphertext after sbox round 11: 16299150263932841256
+ciphertext after pLayer round 11: 9481634111160985732
+-----------------------------------------
+
+ciphertext after AddRoundKey round 12: 4869948092733597825
+ciphertext after sbox round 12: 11232044696147551029
+ciphertext after pLayer round 12: 16433676106252340311
+-----------------------------------------
+
+ciphertext after AddRoundKey round 13: 2598618050970176593
+ciphertext after sbox round 13: 7592048688023815173
+ciphertext after pLayer round 13: 5890912055277412433
+-----------------------------------------
+
+ciphertext after AddRoundKey round 14: 10502598073704800343
+ciphertext after sbox round 14: 16522737913148779533
+ciphertext after pLayer round 14: 11411546778492224417
+-----------------------------------------
+
+ciphertext after AddRoundKey round 15: 6799860760064836518
+ciphertext after sbox round 15: 74063104056728570
+ciphertext after pLayer round 15: 4239863278162078
+-----------------------------------------
+
+ciphertext after AddRoundKey round 16: 13839297918560325785
+ciphertext after sbox round 16: 5531084886928854254
+ciphertext after pLayer round 16: 7221504097095190736
+-----------------------------------------
+
+ciphertext after AddRoundKey round 17: 11833190115522578648
+ciphertext after sbox round 17: 17995560084380042099
+ciphertext after pLayer round 17: 17543932373072607703
+-----------------------------------------
+
+ciphertext after AddRoundKey round 18: 3708874317790443999
+ciphertext after sbox round 18: 13534413368116194930
+ciphertext after pLayer round 18: 16858149568545552370
+-----------------------------------------
+
+ciphertext after AddRoundKey round 19: 3023091513263388667
+ciphertext after sbox round 19: 7937989662636911912
+ciphertext after pLayer round 19: 6000426949837198500
+-----------------------------------------
+
+ciphertext after AddRoundKey round 20: 10612112968264586413
+ciphertext after sbox round 20: 16974142007558494711
+ciphertext after pLayer round 20: 16228312633006318559
+-----------------------------------------
+
+ciphertext after AddRoundKey round 21: 2393254577724154837
+ciphertext after sbox round 21: 7330228553638456176
+ciphertext after pLayer round 21: 3538919747802261526
+-----------------------------------------
+
+ciphertext after AddRoundKey round 22: 17373977803084425244
+ciphertext after sbox round 22: 2689855444641489748
+ciphertext after pLayer round 22: 326646227968746582
+-----------------------------------------
+
+ciphertext after AddRoundKey round 23: 14161704283250910301
+ciphertext after sbox round 23: 5274797955869878535
+ciphertext after pLayer round 23: 5705086909299653093
+-----------------------------------------
+
+ciphertext after AddRoundKey round 24: 10316772927727041006
+ciphertext after sbox round 24: 3631096493315644945
+ciphertext after pLayer round 24: 332199145743093227
+-----------------------------------------
+
+ciphertext after AddRoundKey round 25: 14167257201025256935
+ciphertext after sbox round 25: 5324574191029663517
+ciphertext after pLayer round 25: 7507976964386080927
+-----------------------------------------
+
+ciphertext after AddRoundKey round 26: 12119662982813468819
+ciphertext after sbox round 26: 17561089177196729323
+ciphertext after pLayer round 26: 12262057906442597965
+-----------------------------------------
+
+ciphertext after AddRoundKey round 27: 7650371888015210048
+ciphertext after sbox round 27: 12639609116425005724
+ciphertext after pLayer round 27: 16021390137355945106
+-----------------------------------------
+
+ciphertext after AddRoundKey round 28: 2186332082073781407
+ciphertext after sbox round 28: 5840516522136869346
+ciphertext after pLayer round 28: 2192856584663847820
+-----------------------------------------
+
+ciphertext after AddRoundKey round 29: 16027914639946011522
+ciphertext after sbox round 29: 8188087104213580598
+ciphertext after pLayer round 29: 3365472917841237566
+-----------------------------------------
+
+ciphertext after AddRoundKey round 30: 17200530973123401264
+ciphertext after sbox round 30: 1263596485309790908
+ciphertext after pLayer round 30: 3586839927718860970
+-----------------------------------------
+
+ciphertext after AddRoundKey round 31: 17421897983001024677
+ciphertext after sbox round 31: 2688027885665612784
+ciphertext after pLayer round 31: 2126396022240204414
+-----------------------------------------
+final ciphertext after last addRoundkey: 15961454077522368113
+encrypted plaintext has now become ciphertext: 15961454077522368113
+
+
+
+
+
+Decryption starting...initial plaintext is: 15961454077522368113
+genRoundKey after round 1: 906694364710971881062400
+genRoundKey after round 2: 906694364710971881095168
+genRoundKey after round 3: 906694364710971881127936
+genRoundKey after round 4: 906694364710971881160704
+genRoundKey after round 5: 906694364710971881193472
+genRoundKey after round 6: 906694364710971881226240
+genRoundKey after round 7: 906694364710971881259008
+genRoundKey after round 8: 906694364710971881291776
+genRoundKey after round 9: 906694364710971881324544
+genRoundKey after round 10: 906694364710971881357312
+genRoundKey after round 11: 906694364710971881390080
+genRoundKey after round 12: 906694364710971881422848
+genRoundKey after round 13: 906694364710971881455616
+genRoundKey after round 14: 906694364710971881488384
+genRoundKey after round 15: 906694364710971881521152
+genRoundKey after round 16: 906694364710971881553920
+genRoundKey after round 17: 906694364710971881586688
+genRoundKey after round 18: 906694364710971881619456
+genRoundKey after round 19: 906694364710971881652224
+genRoundKey after round 20: 906694364710971881684992
+genRoundKey after round 21: 906694364710971881717760
+genRoundKey after round 22: 906694364710971881750528
+genRoundKey after round 23: 906694364710971881783296
+genRoundKey after round 24: 906694364710971881816064
+genRoundKey after round 25: 906694364710971881848832
+genRoundKey after round 26: 906694364710971881881600
+genRoundKey after round 27: 906694364710971881914368
+genRoundKey after round 28: 906694364710971881947136
+genRoundKey after round 29: 906694364710971881979904
+genRoundKey after round 30: 906694364710971882012672
+genRoundKey after round 31: 906694364710971882045440
+genRoundKey after round 32: 906694364710971882078208
+-----------------------------------------
+ciphertext after AddRoundKey round 31: 2126396022240204414
+-----------------------------------------
+ciphertext after sbox round 30: 2688027885665612784
+ciphertext after pLayer round 30: 17421897983001024677
+ciphertext after AddRoundKey round 30: 3586839927718860970
+-----------------------------------------
+ciphertext after sbox round 29: 1263596485309790908
+ciphertext after pLayer round 29: 17200530973123401264
+ciphertext after AddRoundKey round 29: 3365472917841237566
+-----------------------------------------
+ciphertext after sbox round 28: 8188087104213580598
+ciphertext after pLayer round 28: 16027914639946011522
+ciphertext after AddRoundKey round 28: 2192856584663847820
+-----------------------------------------
+ciphertext after sbox round 27: 5840516522136869346
+ciphertext after pLayer round 27: 2186332082073781407
+ciphertext after AddRoundKey round 27: 16021390137355945106
+-----------------------------------------
+ciphertext after sbox round 26: 12639609116425005724
+ciphertext after pLayer round 26: 7650371888015210048
+ciphertext after AddRoundKey round 26: 12262057906442597965
+-----------------------------------------
+ciphertext after sbox round 25: 17561089177196729323
+ciphertext after pLayer round 25: 12119662982813468819
+ciphertext after AddRoundKey round 25: 7507976964386080927
+-----------------------------------------
+ciphertext after sbox round 24: 5324574191029663517
+ciphertext after pLayer round 24: 14167257201025256935
+ciphertext after AddRoundKey round 24: 332199145743093227
+-----------------------------------------
+ciphertext after sbox round 23: 3631096493315644945
+ciphertext after pLayer round 23: 10316772927727041006
+ciphertext after AddRoundKey round 23: 5705086909299653093
+-----------------------------------------
+ciphertext after sbox round 22: 5274797955869878535
+ciphertext after pLayer round 22: 14161704283250910301
+ciphertext after AddRoundKey round 22: 326646227968746582
+-----------------------------------------
+ciphertext after sbox round 21: 2689855444641489748
+ciphertext after pLayer round 21: 17373977803084425244
+ciphertext after AddRoundKey round 21: 3538919747802261526
+-----------------------------------------
+ciphertext after sbox round 20: 7330228553638456176
+ciphertext after pLayer round 20: 2393254577724154837
+ciphertext after AddRoundKey round 20: 16228312633006318559
+-----------------------------------------
+ciphertext after sbox round 19: 16974142007558494711
+ciphertext after pLayer round 19: 10612112968264586413
+ciphertext after AddRoundKey round 19: 6000426949837198500
+-----------------------------------------
+ciphertext after sbox round 18: 7937989662636911912
+ciphertext after pLayer round 18: 3023091513263388667
+ciphertext after AddRoundKey round 18: 16858149568545552370
+-----------------------------------------
+ciphertext after sbox round 17: 13534413368116194930
+ciphertext after pLayer round 17: 3708874317790443999
+ciphertext after AddRoundKey round 17: 17543932373072607703
+-----------------------------------------
+ciphertext after sbox round 16: 17995560084380042099
+ciphertext after pLayer round 16: 11833190115522578648
+ciphertext after AddRoundKey round 16: 7221504097095190736
+-----------------------------------------
+ciphertext after sbox round 15: 5531084886928854254
+ciphertext after pLayer round 15: 13839297918560325785
+ciphertext after AddRoundKey round 15: 4239863278162078
+-----------------------------------------
+ciphertext after sbox round 14: 74063104056728570
+ciphertext after pLayer round 14: 6799860760064836518
+ciphertext after AddRoundKey round 14: 11411546778492224417
+-----------------------------------------
+ciphertext after sbox round 13: 16522737913148779533
+ciphertext after pLayer round 13: 10502598073704800343
+ciphertext after AddRoundKey round 13: 5890912055277412433
+-----------------------------------------
+ciphertext after sbox round 12: 7592048688023815173
+ciphertext after pLayer round 12: 2598618050970176593
+ciphertext after AddRoundKey round 12: 16433676106252340311
+-----------------------------------------
+ciphertext after sbox round 11: 11232044696147551029
+ciphertext after pLayer round 11: 4869948092733597825
+ciphertext after AddRoundKey round 11: 9481634111160985732
+-----------------------------------------
+ciphertext after sbox round 10: 16299150263932841256
+ciphertext after pLayer round 10: 11497551351587088379
+ciphertext after AddRoundKey round 10: 6885865333159700478
+-----------------------------------------
+ciphertext after sbox round 9: 7509904083616135582
+ciphertext after pLayer round 9: 3137800183179289673
+ciphertext after AddRoundKey round 9: 16972858238461453389
+-----------------------------------------
+ciphertext after sbox round 8: 15768412539106408361
+ciphertext after pLayer round 8: 8537819302580272484
+ciphertext after AddRoundKey round 8: 13149505321007660384
+-----------------------------------------
+ciphertext after sbox round 7: 11879228789568883270
+ciphertext after pLayer round 7: 7814829892766992066
+ciphertext after AddRoundKey round 7: 12426515911194379969
+-----------------------------------------
+ciphertext after sbox round 6: 16620228142638440623
+ciphertext after pLayer round 6: 10548156923739829610
+ciphertext after AddRoundKey round 6: 5936470905312441705
+-----------------------------------------
+ciphertext after sbox round 5: 8880295415503001253
+ciphertext after pLayer round 5: 15242416919266124385
+ciphertext after AddRoundKey round 5: 1407358863983960675
+-----------------------------------------
+ciphertext after sbox round 4: 6159801407673224441
+ciphertext after pLayer round 4: 1283630595390685348
+ciphertext after AddRoundKey round 4: 15118688650672849062
+-----------------------------------------
+ciphertext after sbox round 3: 13631945609846866710
+ciphertext after pLayer round 3: 4033293189230741730
+ciphertext after AddRoundKey round 3: 17868351244512905443
+-----------------------------------------
+ciphertext after sbox round 2: 11225284652612378655
+ciphertext after pLayer round 2: 4831108503647458794
+ciphertext after AddRoundKey round 2: 9442794522074846699
+-----------------------------------------
+ciphertext after sbox round 1: 15142021067319842553
+ciphertext after pLayer round 1: 9221340801209746084
+ciphertext after AddRoundKey round 1: 13833026819637133988
+-----------------------------------------
+ciphertext after sbox round 0: 14234445315997229888
+ciphertext after pLayer round 0: 123456789012322501
+ciphertext after AddRoundKey round 0: 123456789012345678
+-----------------------------------------
+decrypted ciphertext reveals the plaintext is: 123456789012345678

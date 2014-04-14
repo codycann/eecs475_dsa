@@ -1,0 +1,53 @@
+<h1>Simon Cipher</h1>
+
+<p>Implementation the <a href="https://eprint.iacr.org/2013/404.pdf">SIMON</a> cipher in C++.</p>
+
+<h2>How To Use</h2>
+
+<h3>CLI Mode</h3>
+
+<p>First, make sure you run <code>make</code> in the project directory to make the programs.  If you are in the CAEN environment this should correctly compile the programs.  Then you can interface with the SIMON cipher in the following ways.</p>
+
+<h4>Key Generation</h4>
+
+<p>Run the <code>keygen</code> command with the key size as an argument to generate a random key of at most that size.  The key will be output in <strong>decimal</strong>.</p>
+
+<pre><code>./simon keygen &lt;key-size&gt;
+</code></pre>
+
+<h4>Encryption</h4>
+
+<p>Run the <code>encrypt</code> command to encrypt a message.  It requires 4 arguments, the block size, the key size, the key, and the plaintext.  The block size and key size must follow the constraints set out in table 3.1 (page 10) of the <a href="https://eprint.iacr.org/2013/404.pdf">Simon paper</a>.  The key and plaintext should be in <strong>decimal</strong>.  The ciphertext will also be output in <strong>decimal</strong>.</p>
+
+<pre><code>./simon encrypt &lt;block size&gt; &lt;key size&gt; &lt;key&gt; &lt;plaintext&gt;
+</code></pre>
+
+<h4>Decryption</h4>
+
+<p>Run the <code>decrypt</code> command to decrypt a message.  It requires 4 arguments, the block size, the key size, the key, and the ciphertext.  The block size and key size must follow the constraints set out in table 3.1 (page 10) of the <a href="https://eprint.iacr.org/2013/404.pdf">Simon paper</a>.  The key and ciphertext should be in <strong>decimal</strong>.  The plaintext will also be output in <strong>decimal</strong>.</p>
+
+<pre><code>./simon decrypt &lt;block size&gt; &lt;key size&gt; &lt;key&gt; &lt;ciphertext&gt;
+</code></pre>
+
+<h3>Programmatically</h3>
+
+<p>First create the Simon object with the desired block size and key size.  Then make a call to <code>expand_key</code> to expand your key.  Then you can call <code>encrypt</code> and <code>decrypt</code> to encrypt and decrypt messages.  All numbers passed to functions must be of type mpz_class.  The <code>KeyGenerator</code> class may be used to generate pseudorandom keys of the correct key size.</p>
+
+<pre><code>Simonsimon(&lt;block-size&gt;, &lt;key-size&gt;);
+KeyGenerator gen(&lt;key-size&gt;, &lt;seed&gt;);
+mpz_class key = gen(); /* A mpz_class number of KeySize bits */
+mpz_class ciphertext = simon.encrypt(key, plaintext /* A mpz_class number of at most block-size bits */);
+mpz_class plaintext = simon.decrypt(key, ciphertext /* A mpz_class number of at most block-size bits */);
+</code></pre>
+
+<h1>Makefile</h1>
+
+<p>The Makefile is set up to compile the tests in the CAEN environment by default.  Simply enter <code>make</code> to make the tests in the CAEN environment.</p>
+
+<h1>TODO</h1>
+
+<ul>
+<li>Check for other implementation requirements that haven't been met.</li>
+<li>Check for edge case mistakes.</li>
+<li>Check for mistakes in the CLI.</li>
+</ul>

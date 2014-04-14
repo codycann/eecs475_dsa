@@ -1,0 +1,19 @@
+speckutil program readme
+
+The speckutil program is a helper program (similar in style to openssl) that will do common operations using the SPECK algorithm.
+
+The following flags are supported:
+-p/--password [password] OR -k/--key [key file]
+	Specifies the key that speckutil should use. If -p is used, the next argument is converted to a 128 bit key for use in encryption/decryption. If -k is used, the file is loaded as binary data then converted to a 128 bit key for use in encryption/decryption.
+
+-e/--encrypt [input file] OR -d/--decrypt [input file]
+	Specifies the file to be used with encryption/decryption in ECB mode. If no key is specified, a random key will be generated and saved to key.bin in the current directory. If no output file is specified, output will be saved to output.bin in the current directory.
+
+-o/--output [output file]
+	Specifies the output file to use with other flags.
+
+-g/--generate
+	Generates a random 128 bit key, saving it to the specified output file in the -o argument. If no output file is defined, saves the file to key.bin in the current directory.
+
+-t/--time
+	Times the encryption/decryption operation, reporting the results in seconds. The time is only the time to encrypt/decrypt the stream, and does not time key generation, expansion or file I/O.

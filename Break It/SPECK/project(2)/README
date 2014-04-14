@@ -1,0 +1,58 @@
+PLEASE READ ME BEFORE GRADING ANYTHING!
+
+Our project uses C++11. To compile on CAEN, please use the provided Makefile or enable C++11 manually using -std=c++11 and:
+
+PATH := /usr/um/gcc-4.7.0/bin:$(PATH)
+LD_LIBRARY_PATH := /usr/um/gcc-4.7.0/lib64
+LD_RUN_PATH := /usr/um/gcc-4.7.0/lib64
+
+-----------------------------------------------
+
+Compile with:
+
+	$ make
+
+Generate a key with:
+
+	$ ./speck keygen SIZE
+
+where SIZE is the desired key size in bits and is equal to 128, 192, or 256. The value of SIZE will determine the number of key parts--a 128-bit key will have two parts, a 192-bit key will have three parts, and a 256-bit key will have four parts. 
+
+Encrypt a 128-bit plaintext hex message using:
+
+	$ ./speck encrypt KEY_PART_ONE ... KEY_PART_N MESSAGE_PART_ONE MESSAGE_PART_TWO
+
+Plaintext messages must be split into two 64-bit parts and may not be longer than 128 bits, or 32 hex characters (64 bits/16 characters per part). They may be shorter; shorter messages will be padded with 0s. However, shorter messages must still consist of two parts. Keys must have either two, three or four parts, as specified above.
+
+Decrypt a 128-bit ciphertext hex message using:
+
+	$ ./speck decrypt KEY_PART_ONE ... KEY_PART_N MESSAGE_PART_ONE MESSAGE_PART_TWO
+
+Example:
+
+	$ make
+	$ ./speck keygen 128
+	$ 1234567890abcdef 1234567890abcdef
+	$ ./speck encrypt 1234567890abcdef 1234567890abcdef 0000000000000000 0000000000000000
+	$ input:  0000000000000000 0000000000000000
+	$ output: 4d170140194f9f80 87759d880bae9ec7
+	$ ./speck decrypt 1234567890abcdef 1234567890abcdef 4d170140194f9f80 87759d880bae9ec7
+	$ input:  4d170140194f9f80 87759d880bae9ec7
+	$ output: 0000000000000000 0000000000000000
+
+Note: to verify correctness, please refer to test_vectors.cpp instead of the command line interface. The command line interface only allows a word size of 64 bits for simplicity, and chooses the number of rounds systematically. However, the code in test_vectors.cpp sets all the parameters manually and produces correct output for all of the test vectors provided in the SPECK paper.
+
+To run our implementation on the test vectors provided in the SPECK paper compile and run with:
+
+	$ make test
+	$ ./speckTest
+
+To run our performance tests compile and run with:
+
+	$ make performance
+	$ ./speckPerformance
+
+If you'd prefer to write and run code manually, there is a simple, documented example in example.cpp:
+
+	$ make example
+	$ ./speckExample

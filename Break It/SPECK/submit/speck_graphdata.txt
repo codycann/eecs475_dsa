@@ -1,0 +1,7 @@
+Each sheet contains a table of results and an accompanying graph for varying block sizes with fixed key sizes.
+Key sizes were fixed at 256-, 128-, and 64-bits for each trial. 
+Three trials of each different block size were conducted, and the average of the three trials was taken as final data.
+Both encryption and decryption were tested with the three discrete key sizes.
+
+The results showed that the runtimes were constant despite varying block sizes (upto 128-bits) and key sizes (upto 256-bits), 
+thereby indicating that neither the block sizes nor key sizes impacted the running time.

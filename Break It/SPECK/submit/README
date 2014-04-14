@@ -1,0 +1,148 @@
+How to compile
+--------------------------
+Have the Uberzahl folder in the same directory as all the .cpp files extracted from the tar. The Uberzahl folder is included in the tar. For ex: test directory should contain the uberzahl folder, speck.h, speck.cpp, aux.h, aux.cpp, main.cpp, main1.cpp, main2.cpp.
+
+speck.h, speck.cpp
+-----------------------
+speck.h contains the class declaration and method prototypes for the Speck 128/256 block cipher specification. 
+Use the public interface methods to encrypt and decrypt blocks.
+The encryption and decryption functions expect blocks of size upto 128 bits and keys of size upto 256 bits according to 
+the implementation of Speck implemented (Speck128/256).
+
+aux.cpp aux.h
+--------------------------------
+Auxillary files used by speck to perform circular shifts
+
+uberzahl/uberzahl.cpp
+---------------------------------
+The multiprecision arithmetic library used to represent numbers. The Speck block cipher class implemented in speck.h uses
+uberzahl numbers to perform it's calculations.
+
+
+Compile Commands
+-----------------------------------
+g++ -std=c++11 uberzahl/uberzahl.cpp speck.cpp aux.cpp main.cpp -o zeroth
+g++ -std=c++11 uberzahl/uberzahl.cpp speck.cpp aux.cpp main1.cpp -o first
+g++ -std=c++11 uberzahl/uberzahl.cpp speck.cpp aux.cpp main2.cpp -o second
+
+
+zeroth
+----------------------------------
+	Afer running the commands above, zeroth is the name of the executable that is run in the following ways: 
+		1) Enter ./zeroth in the terminal/shell. This yields the following output:
+			Sample run: ./zeroth
+			Sample Output: 
+
+				initial plaintext: 302631697902727727592492634699652819598
+				key: 70207052758802577588333720939424649963476392488127903525438466553545650053629
+				ciphertext: 271389018408946667611090080834305817050
+				-----------------------
+				decrypted text: 302631697902727727592492634699652819598
+				is plaintext same after encryption and decryption?: 1
+				<END OF OUTPUT>
+
+			Semantics of executable:
+			-----------------------------------------
+				When you run ./zeroth, the program generates a random 128bit block to use as plaintext and a random 256bit block to 
+				use as the key for the program. It then prints the initial plaintext (the random 128bit block chosen) followed by the ciphertext after encrypting it with the 256bit key. It then decrypts the ciphertext with the same key, and checks
+				whether the plaintext remains untransformed after encryption followed by decryption.
+
+
+		2) Enter ./zeroth <plaintext> <key> in the terminal/shell.
+			Sample run: ./zeroth 1281 25622
+			Sample Output: 
+
+				initial plaintext: 1281
+				key: 25622
+				ciphertext: 190929240972440361839373186045357638712
+				-----------------------
+				decrypted text: 1281
+				is plaintext same after encryption and decryption?: 1
+				<END OF OUTPUT>
+
+			Semantics of executable:
+			-------------------------
+			When you run ./zeroth <plaintext> <key>, the program uses <key> as the key to the program and <plaintext> as plaintext to the program. The program assumes that <key> is key of size upto 256 bits (can be represented with 256 bits) and <plaintext> is a block that can be represented by 128 bits.
+			It then prints the initial plaintext (the 128bit block input) followed by the ciphertext after encrypting it with the 256bit key. It then decrypts the ciphertext with the same key, and checks
+			whether the plaintext remains untransformed after encryption followed by decryption.
+
+
+first
+--------------------------------
+After running the compile commands, first is the name of the executable that is run in the following ways:
+	1) Enter ./first <mode> <block> <key> in the terminal/shell. This yields the following output:
+		Sample run: ./first encrypt  8909881234 23658901239804
+		Sample Output:
+
+			initial plaintext: 8909881234
+			key: 23658901239804
+			ciphertext: 112768728019345780803925010321190804766
+			<END OF OUTPUT>
+
+		Sample run: ./first decrypt 112768728019345780803925010321190804766 23658901239804
+		Sample Output:
+
+			initial ciphertext: 112768728019345780803925010321190804766
+			key: 23658901239804
+			plaintext: 8909881234
+			<END OF OUTPUT>
+
+		Semantics of executable
+		-----------------------
+		<mode> - encrypt or decrypt
+		<block> - the initial plaintext or ciphertext when the mode is encrypt or decrypt respectively. Any number that
+		          can be represented by 128bits
+		<key>  - any number that can be represented with 256 bits
+		
+
+		encrypt mode- encrypts <block> with <key> according to SPECK 128/256.
+		decrypt mode- decrypts <block> with <key> according to SPECK 128/256.
+
+
+second
+-------------------------
+After running the compile commands, second is the name of the executable that is run in the following ways:
+	1) Enter ./second <mode> <blocksize> <keysize> in the terminal/shell. This yields the following output:
+
+		Sample run: ./second decrypt 3 5
+		Sample output: 
+
+			initial ciphertext: 4
+			key: 16
+			key size: 5
+			ciphertext size: 3
+			plaintext: 204941698731486736064675334429450965355
+			<END OF OUTPUT>
+
+		Sample run: ./second encrypt 4 6
+		Sample output: 
+			initial plaintext: 9
+			key: 32
+			key size: 6
+			plaintext size: 4
+			ciphertext: 310295825582406953109233899441590159258
+			<END OF OUTPUT>
+
+		Semantics of executable
+		--------------------------------------
+			<mode> - encrypt or decrypt
+			<blocksize> - the size of the plaintext or ciphertext (depending on encrypt mode or decrypt mode) in bits.
+			              Max user input should be 128
+			<keysize> - the size of the key in bits. Max user input should be 256
+
+			encrypt mode -
+				Finds a random block of <blocksize> bits and chooses a random key of <keysize> bits.
+			    It then encrypts this block with this key to get the resultant ciphertext. It then prints out the 
+			    message as depicted in the sample output
+
+			decrypt mode -
+				Finds a random block of <blocksize> bits and chooses a random key of <keysize> bits. It then
+				decrypts this block with this key to get the resultant plaintext. It then prints out the message as
+			    depicted in the sample output
+
+
+contact
+----------
+Rohit Ramprasad - rrampr@umich.edu
+Daniel Lao - danlao@umich.edu
+Vishaal Kalwani - vishaalk@umich.edu

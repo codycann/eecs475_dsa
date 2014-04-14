@@ -1,0 +1,41 @@
+---test vectors---
+Key: 14ff6935660e42bc aec926f3928088dc
+Plaintext: 3d791d78bc67d50b 36a27ba5866bcd47
+Ciphertext: 86976b3de309ee32 d6df752af13e3ef8
+
+Key: a54b720b14098463 88c40e29c8cad69
+Plaintext: a5c28ecd15bd934b 13a022333568e613
+Ciphertext: 8b0981f30a68074b b281ad68ebb03096
+
+Key: 7b694dab586e4de2 b218a5be43990588
+Plaintext: 5c88d39f61bcdae0 5ba058471cc43cfe
+Ciphertext: e04c64ee675ece64 1189454bd7bc7e68
+
+Key: 406ffcc6e422b542 924614b00865c320
+Plaintext: 529f1501fc434b08 3c763e92ebc9968e
+Ciphertext: 7d956b2740f7877c 2ac6b334eae4516b
+
+Key: 3d739e802dfcc53 a0e04c8547dc4458
+Plaintext: f772dc3fc848bb0f 1c5cee29df463a8d
+Ciphertext: afee2288fe1b9d08 eea6da225b500837
+
+Key: bcfc1f24873bc860 6de102c78773e97b
+Plaintext: 3b794da5b1614d0c 60a64cdc49291774
+Ciphertext: d6318e0876ad385b bb9fc47def607c41
+
+Key: 153d1eac79fbf7ce 294b8f7ec73ee911
+Plaintext: 7882833d0935352f 843e30f7ca8f6b8b
+Ciphertext: 5de34388f3f9ed9f 81d39c74e39a6268
+
+Key: 46da96e4d84847ae bc54b2b69ca62f15
+Plaintext: e6288e60bf5b7fda 3c1c21a13cba3b4
+Ciphertext: 2b3c704fb5d54b68 cf6448df145b9920
+
+Key: 88d4c66d1460e42b 469f2af247d4efca
+Plaintext: 7ae6e39b5d9baa82 2085bb16697ae540
+Ciphertext: 9bb14011b38dfd66 b1d3bbdcdfc7766
+
+Key: 4f6e04f0ac3cc8cb cabf9d133e2e2c15
+Plaintext: d8bad83258f81b47 1cf303ae76de0cfb
+Ciphertext: dc29682d3f65d32 19f98c2d59a5fe05
+

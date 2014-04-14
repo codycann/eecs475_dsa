@@ -1,0 +1,1 @@
+uberzahl decrypt(uberzahl key,uberzahl ciphertext);

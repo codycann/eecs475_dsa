@@ -1,0 +1,73 @@
+==================
+| SAMPLE OUTPUTS |
+==================
+
+Test Vectors from Appendix C of Simon/Speck paper
+
++-------------------------------------+
+ Test Vector 1 (first one on page 42)
+ Speck32/64
+ Key: 1918 1110 0908 0100
+ Plaintext: 6574 694c
+ Ciphertext: a868 42f2
++-------------------------------------+
+
+$ ./program encrypt 16 64 "1918, 1110, 0908, 0100" "6574, 694c"
+Wordsize:16 Keysize:64
+alpha:7 beta:2 m:4 T:22
+
+Input Key:
+---------
+1918,1110,908,100
+
+Ciphertext:
+----------
+a868,42f2 
+
+
+$ ./program decrypt 16 64 "1918, 1110, 0908, 0100" "a868,42f2"
+Wordsize:16 Keysize:64
+alpha:7 beta:2 m:4 T:22
+
+Input Key:
+---------
+1918,1110,908,100
+
+Plaintext:
+---------
+6574,694c 
+
+
+
++-------------------------------------+
+ Test Vector 2 (sixth on page 42)
+ Speck96/96
+ Key: 0d0c0b0a0908 050403020100
+ Plaintext: 65776f68202c 656761737520
+ Ciphertext: 9e4d09ab7178 62bdde8f79aa
++-------------------------------------+
+
+$ ./program encrypt 48 96 "0d0c0b0a0908, 050403020100" "65776f68202c, 656761737520" 
+Wordsize:48 Keysize:96
+alpha:8 beta:3 m:2 T:28
+
+Input Key:
+---------
+d0c0b0a0908,50403020100,0,0
+
+Ciphertext:
+----------
+9e4d09ab7178,62bdde8f79aa 
+
+
+$ ./program decrypt 48 96 "0d0c0b0a0908, 050403020100" "9e4d09ab7178,62bdde8f79aa " 
+Wordsize:48 Keysize:96
+alpha:8 beta:3 m:2 T:28
+
+Input Key:
+---------
+d0c0b0a0908,50403020100,0,0
+
+Plaintext:
+---------
+65776f68202c,656761737520 

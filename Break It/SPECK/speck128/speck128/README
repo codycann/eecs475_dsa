@@ -1,0 +1,35 @@
+To compile: g++ speck.cc uberzahl/uberzahl.cpp -o speck
+Key generation:
+./speck keygen
+output: two 64 bit decimal key values (<key_1> <key_2>)
+
+Encryption:
+./speck encrypt <key_1> <key_2> <plaintext_1> <plaintext_2>
+input: 64 bit decimal values for keys and plaintexts
+output: two 64 bit decimal ciphertext values (<ciphertext_1> <ciphertext_2>)
+
+Decryption:
+./speck decrypt <key_1> <key_2> <ciphertext_1> <ciphertext_2>
+input: 64 bit decimal values for keys and ciphertexts
+output: two 64 bit decimal plaintext values
+
+Test vectors from Speck spec:
+key: 1084818905618843912 506097522914230528
+plaintext: 8241948097058793832 4836988544347303525
+
+Sample terminal interaction (comments on lines beginning with "#")
+
+$ g++ speck.cc uberzahl/uberzahl.cpp -o speck
+
+# generate key values
+# here I am generating my own keys rather than using the test vector keys provided
+$ ./speck keygen
+4186468004339784396 1120064010016501180
+
+# use keygen values and a plaintext to encrypt, result is ciphertext
+$ ./speck encrypt 4186468004339784396 1120064010016501180 8241948097058793832 4836988544347303525
+10697880724981665679 12827872631199108731
+
+# use keygen values and a ciphertext to decrypt, result is plaintext
+$ ./speck decrypt 4186468004339784396 1120064010016501180 10697880724981665679 12827872631199108731
+8241948097058793832 4836988544347303525

@@ -1,0 +1,3 @@
+[submodule "uberzahl"]
+	path = uberzahl
+	url = https://github.com/aljames-arctic/uberzahl.git

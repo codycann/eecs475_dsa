@@ -1,0 +1,61 @@
+475 Project interface:
+
+    The interface functions are defined in 475Project.h and 475Project.cpp
+    It provides keygen, encrypt and decrypt
+    Details are in 475Project.h
+    See main.cpp for example
+
+How to use PRESENT.cpp:
+
+Setup: 
+	Key size: 80 bits or 128 bits
+        Key requirements: No. Any 80 bits or 128 bits number can be the key.
+	
+        Initialize key as a uberzahl. Pass to the initializer of Present class specifying how large the key is.
+	
+	For example.	
+
+	include <present.h>
+	...
+
+        uberzahl u("4759477275222530853120"); //an arbitrary number
+        Present p(u, 16);
+
+Encryption:
+	Input Block size: 64 bits
+	Output Block size: 64 bits
+
+        Initialize message as a uberzahl, 8 in length. Pass to the encryption of Present instance. The output is the corresponding cypher, uberzahl length 8.
+
+	For example.
+	
+        uberzal message("283686952306183");
+        uberzal c = p.encrypt(message);
+
+Decryption:
+	Input Block size: 64 bits
+        Output Block size: 64 bits
+
+        Pass a cipher as a uberzahl of length 8 to the decryption of Present instance. The output is the original message, a uberzahl of length 8.
+
+        For example. (Assume c is the cipher we get from encryption)
+
+        uberzal m = p.encrypt(c);
+
+SEE main.cpp for the whole example.
+SEE Makefile for how to build.
+
+Builing on CAEN:
+    Before make, Run "module load gcc";
+
+Running testBench:
+    The testBench for encryption is found at Appendix I of Present pager at http://homes.esat.kuleuven.be/~abogdano/papers/present_ches07.pdf
+    The result is given in testBenchResult.txt
+
+    To Run testbench, you can run
+        make testBench && ./testBench
+
+Performance analysis:
+    It's basically linear given the number of blocks that need to be processed 
+    There isn't any noticeable increase until you have to use another block.
+    The graph can be found at 475-project-graph.pdf

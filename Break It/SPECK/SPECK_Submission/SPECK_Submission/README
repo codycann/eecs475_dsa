@@ -1,0 +1,15 @@
+Use the make command to generate the "proj" executable
+
+To run the key generation function:
+./proj keygen (hex|dec)
+
+To run the encryption function:
+./proj encrypt (hex|dec) key3 key2 key1 key0 plaintext1 plaintext0
+
+To run the decryption function:
+./proj decrypt (hex|dec) key3 key2 key1 key0 ciphertext1 ciphertext0
+
+Notes: 
+-The (hex|dec) field indicates what base the input and output should be in.
+	E.g. To get a hex key "./proj keygen hex"
+-All number fields cannot exceed 64 bits.

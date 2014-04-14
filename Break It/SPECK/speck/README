@@ -1,0 +1,268 @@
+# 1. Building
+Please build this project on a CAEN computer (including the login server). Otherwise, please make user you have gcc/4.7+, Boost Unit Test Framework, and CMake 2.6+ available.
+
+To build, under the current directory, type
+
+    $ ./build.sh
+
+If you run into problems, delete the folder `build`, if present, then try again.
+
+
+# 2. Usage
+
+## 2.1 Testing
+Execute `speck-tests` to run test vectors. A successful test should produce no error messages.
+To run the test vectors manually, execute
+
+    $ ./speck-command encrypt -b <block bits> -k <key bits> <key in hex> <plaintext in hex>
+
+For example, for the first official test vector (32/64):
+
+    $ ./speck-command encrypt -b 32 -k 64 1918111009080100 6574694c
+    a86842f2
+
+which matches the official document.
+
+See section 3.2 for more details on command usage and examples.
+
+# 2.2 Code
+The speck cipher is implemented in files "speck.h" and "speck.cpp". Look under there for the implementation and class interface.
+
+ECB mode wrapper is under "ecb.h". TLS block cipher padding is under "tlspadding.h".
+
+Two command line interfaces exist for this Speck implementation, the speck-command (argument-based cli), implemented under "speck_command.cpp" and "speck_getopt.h"; the speck-cli (interactive cli), implemented under "speck_cli.cpp". Look under "speck_command.cpp" for an example of how the speck library should be used, including the gory details of binascii conversion (yes, following the python package).
+
+# 2.3 Hex, Binary, and Endianness
+This implementation of the Speck cipher uses a binary interface for setKey, encryptBlock, and decryptBlock. This makes it easier to use and more efficient than an implementation that (unnecessarily) uses a big number library. However, this design choice also means there may be ambiguity as to the byte ordering of the input and output data.
+
+To make the behavior correspond directly to the test vectors provided by the specifications, it was decided that the endianness to be used is big endian. Therefore, when testing this algorithm, one would only need to feed the provided test vector provided in the specifications without any reordering as a byte array into the algorithm, and it will produce the specified result in a similar fashion.
+
+To be more precise, for a 128-bit block, the 16 bytes are interpreted as follows:
+
+X[63:56] X[55:48] X[47:40] X[39:32] X[31:24] X[23:16] X[15:8] X[7:0]  Y[63:56] Y[55:48] Y[47:40] Y[39:32] Y[31:24] Y[23:16] Y[15:8] Y[7:0]
+
+Where X and Y are the inputs to the round function of the Speck algorithm, and X[a:b] represents the value of bits b-a in the X number.
+
+This similarly extends to the key, and other block sizes.
+
+
+In the case of the cli provided, the hex string input and outputs are interpreted as the binary data described above (packed) converted to a hexadecimal representation, where every two hexadecimal digits (0 padded on the left if necessary) represents a byte. Alternatively, each hexadecimal input and output can be interpreted as a whole hexadecimal number, where multiple words are simply concatenated. 
+
+To use the sample test vectors from the specifications, the spaces in the key, plaintext, and ciphertext must be removed (thus concatenating the words).
+
+In the case of string inputs and outputs (the -r, --text option in speck-command), the string is first converted to a binary array in the encoding specified by your current system locale (which is actually performed by the shell), then the array is padding on the end by zeros (or null bytes, so the apparent string length does not change), and the entire array is then interpreted in the manner described above.
+
+# 3. speck-command
+Usage: speck-command [-etxrh] <command> [<args>]
+speck-command -h will display general instructions
+Available commands are:
+   keygen          Generate a (random) key for a given key size
+   encrypt         Encrypt a single block given as an argument
+   decrypt         Decrypt a single block given as an argument
+   encrypt-stream  Encrypt a stream of given in stdin
+   decrypt-stream  Decrypt a stream of data given in stdin
+
+## 3.1 Key generation
+Usage: speck-command keygen [KEYBITS]
+Generate a random key given a key size, and output the key as a hexadecimal
+number.
+
+   KEYBITS         number of bits in the generated key. Default 256
+                   Valid bit sizes are 64, 72, 96, 128, 144, 192, 256.
+
+### Example
+
+    $ ./speck-command keygen 256
+    4a67aa46c20bc3bf116540dedc2e8a22dd4e3d4c30dd409596bd397f44775f93
+
+Note that the above output is random and will change on each invocation.
+
+## 3.2 Encrypt
+Usage: speck-command encrypt KEY PLAINTEXT
+Encrypt a single PLAINTEXT block using Speck, with the key KEY.
+The resulting CIPHERTEXT block will be printed to stdout
+The PLAINTEXT block must not be longer than the block size.
+
+   KEY                    the key as a hexadecimal number
+   PLAINTEXT              the plaintext. See --text, --hex for modes
+   -h, --hex (default)    accept/generate PLAINTEXT and CIPHERTEXT in hex mode.
+                          hex = hexadecimal number (implies big-endian).
+                          No spaces are allowed in between words.
+                          If shorter than a block, the input will be padded
+                          with zeros ON THE MSB (left).
+   -t, --text             accept/generate PLAINTEXT in text mode.
+                          CIPHERTEXT (generated or input) is still in hex mode
+                          KEY (input) is still in hex mode
+                          If shorter than a block, the input will be padded
+                          with zeros ON THE LSB (right).
+                          Upon decryption, the padding zeros will be stripped
+                          if under text mode
+   -b, --block-size SIZE  block size in bits. Default is 128
+                          Valid block sizes are 32, 48, 64, 96, 128.
+   -k, --key-size SIZE    key size in bits. Default is 256
+                          Valid key sizes are 64, 72, 96, 128, 144, 192, 256.
+
+Valid (block-size, key-size) pairs are:
+(32, 64), (48, 72), (48, 96), (64, 96), (64, 128), (96, 96), (96, 144)
+(128, 128), (128, 192), (128, 256)
+
+### Examples
+Speck 128/256 test vector:
+
+    $ ./speck-command encrypt 1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100 65736f6874206e49202e72656e6f6f70
+    4109010405c0f53e4eeeb48d9c188f43
+
+Speck 96/144 test vector:
+
+    $ ./speck-command encrypt -b 96 -k 144 1514131211100d0c0b0a0908050403020100 656d6974206e69202c726576
+    2bf31072228a7ae440252ee6
+
+String:
+
+    $ ./speck-command encrypt -r 4a67aa46c20bc3bf116540dedc2e8a22dd4e3d4c30dd409596bd397f44775f93 "Hello World!"
+    Warning: string Hello World! too short. Will be padded with null bytes on the right
+    cc56f7de4dc0fb0f33371a84f2aa4f65
+
+## 3.3 Decrypt
+Usage: speck-command decrypt KEY CIPHERTEXT
+Decrypt a single CIPHERTEXT block using Speck, with the key KEY.
+The resulting PLAINTEXT will be printed to stdout
+The CIPHERTEXT block must not be longer than the block size.
+
+   KEY                    the key as a hexadecimal number
+   CIPHERTEXT             the ciphertext.
+   -h, --hex (default)    accept/generate PLAINTEXT and CIPHERTEXT in hex mode.
+                          hex = hexadecimal number (implies big-endian).
+                          No spaces are allowed in between words.
+                          If shorter than a block, the input will be padded
+                          with zeros ON THE MSB (left).
+   -t, --text             accept/generate PLAINTEXT in text mode.
+                          CIPHERTEXT (generated or input) is still in hex mode
+                          KEY (input) is still in hex mode
+                          If shorter than a block, the input will be padded
+                          with zeros ON THE LSB (right).
+                          Upon decryption, the padding zeros will be stripped
+                          if under text mode
+   -b, --block-size SIZE  block size in bits. Default is 128
+                          Valid block sizes are 32, 48, 64, 96, 128.
+   -k, --key-size SIZE    key size in bits. Default is 256
+                          Valid key sizes are 64, 72, 96, 128, 144, 192, 256.
+
+Valid (block-size, key-size) pairs are:
+(32, 64), (48, 72), (48, 96), (64, 96), (64, 128), (96, 96), (96, 144)
+(128, 128), (128, 192), (128, 256)
+
+### Examples
+Speck 128/256 test vector:
+
+    $ ./speck-command decrypt 1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100 4109010405c0f53e4eeeb48d9c188f43
+    65736f6874206e49202e72656e6f6f70
+
+Speck 96/144 test vector:
+
+    $ ./speck-command decrypt -b 96 -k 144 1514131211100d0c0b0a0908050403020100 2bf31072228a7ae440252ee6
+    656d6974206e69202c726576
+
+String:
+
+    $ ./speck-command decrypt -r 4a67aa46c20bc3bf116540dedc2e8a22dd4e3d4c30dd409596bd397f44775f93 cc56f7de4dc0fb0f33371a84f2aa4f65
+    Hello World!
+
+String in hex:
+
+    $ ./speck-command decrypt -r 4a67aa46c20bc3bf116540dedc2e8a22dd4e3d4c30dd409596bd397f44775f93 cc56f7de4dc0fb0f33371a84f2aa4f65
+    48656c6c6f20576f726c642100000000
+
+## 3.4 encrypt-stream
+Usage: speck-command encrypt-stream KEY
+Encrypt a stream of binary data from stdin, and write the encrypted
+result to stdout
+The stdin input is treated as consecutive blocks of big-endian binary
+packed data blocks, in the byte order of test vectors shown in 
+https://eprint.iacr.org/2013/404.pdf
+
+   KEY                    the key as a hexadecimal number
+   -e, --ecb              process the stream in ecb mode. The stream size
+                          must be an exact multiple of the block size
+   -t, --tls-ecb          process the stream in ecb mode with tls padding
+                          see http://www.hit.bme.hu/~buttyan/courses/
+                          BMEVIHIM132/2010/04_block_enc_modes.pdf slide 9
+   -b, --block-size SIZE  block size in bits. Default is 128
+                          Valid block sizes are 32, 48, 64, 96, 128.
+   -k, --key-size SIZE    key size in bits. Default is 256
+                          Valid key sizes are 64, 72, 96, 128, 144, 192, 256.
+
+Valid (block-size, key-size) pairs are:
+(32, 64), (48, 72), (48, 96), (64, 96), (64, 128), (96, 96), (96, 144)
+(128, 128), (128, 192), (128, 256)
+
+### Examples
+ECB Mode:
+
+    $ dd if=../README bs=16 count=10 | ./speck-command encrypt-stream -e 4a67aa46c20bc3bf116540dedc2e8a22dd4e3d4c30dd409596bd397f44775f93 > test1.bin
+    Warning: you are using Speck in the insecure ECB mode.
+    10+0 records in
+    10+0 records out
+    160 bytes (160 B) copied, 0.000154642 s, 1.0 MB/s
+
+ECB Mode with TLS Padding:
+
+    $ ./speck-command encrypt-stream -t 4a67aa46c20bc3bf116540dedc2e8a22dd4e3d4c30dd409596bd397f44775f93 < ../README > test2.bin
+    Warning: you are using Speck in the insecure ECB mode.
+
+## 3.5 decrypt-stream
+Usage: speck-command decrypt-stream KEY
+Decrypt a stream of binary data from stdin, and write the decrypted
+result to stdout
+The stdin input is treated as consecutive blocks of big-endian binary
+packed data blocks, in the byte order of test vectors shown in 
+https://eprint.iacr.org/2013/404.pdf
+
+   KEY                    the key as a hexadecimal number
+   -e, --ecb              process the stream in ecb mode. The stream size
+                          must be an exact multiple of the block size
+   -t, --tls-ecb          process the stream in ecb mode with tls padding
+                          see http://www.hit.bme.hu/~buttyan/courses/
+                          BMEVIHIM132/2010/04_block_enc_modes.pdf slide 9
+   -b, --block-size SIZE  block size in bits. Default is 128
+                          Valid block sizes are 32, 48, 64, 96, 128.
+   -k, --key-size SIZE    key size in bits. Default is 256
+                          Valid key sizes are 64, 72, 96, 128, 144, 192, 256.
+
+Valid (block-size, key-size) pairs are:
+(32, 64), (48, 72), (48, 96), (64, 96), (64, 128), (96, 96), (96, 144)
+(128, 128), (128, 192), (128, 256)
+
+### Examples
+ECB Mode:
+
+    $ ./speck-command decrypt-stream -e 4a67aa46c20bc3bf116540dedc2e8a22dd4e3d4c30dd409596bd397f44775f93 < test1.bin
+    Warning: you are using Speck in the insecure ECB mode.
+    <beginning of this document, omitted...>
+
+ECB Mode with TLS Padding:
+
+    $ ./speck-command decrypt-stream -t 4a67aa46c20bc3bf116540dedc2e8a22dd4e3d4c30dd409596bd397f44775f93 < test2.bin
+    Warning: you are using Speck in the insecure ECB mode.
+    <this document, omitted...>
+
+
+4.  Interactive Interface
+usage: speck-cli
+
+It will prompt for a command.
+
+valid commands are:
+      setkey <bits per block> <bits per key> <hex string>
+			encrypt <hex string>
+			decrypt <hex string>
+			quit
+
+‘setkey’ sets the key for the cipher with the hex string. 
+This.must be run before encrypting/decrypting
+
+‘encrypt’ generates ciphertext from the hex string of plaintext under given key.
+
+‘decrypt’ generates plaintext from the hex string of ciphertext under given key.
+
+‘quit’ exits program

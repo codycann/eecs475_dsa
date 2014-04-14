@@ -1,0 +1,6 @@
+Hi Staff and people trying to break our code:
+
+speck.h and speck.cc contain the definition and implementation of our SPECK cipher library.
+The included makefile makes specktest.out and speckutil.out.
+specktest.out is a simple test file that tests the published test vector for SPECK 128/128, and  all the other library functions.
+speckutil.out is a helper program that performs common operations using the SPECK cipher. See speckutil.readme for more information on how the program works.
