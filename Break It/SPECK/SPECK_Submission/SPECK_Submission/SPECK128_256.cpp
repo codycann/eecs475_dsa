@@ -4,6 +4,9 @@
 #include <time.h>
 #include <limits.h>
 #include <string.h>
+#include <chrono>
+#include <cstdlib>
+#include <thread>
 
 #define ull unsigned long long
 
@@ -20,15 +23,17 @@ struct Parameters
 	int rounds;
 };
 
+int myRand = 0;
+
 ull RandULL()
 {
 	//Seed rand if required (Because I am too lazy to remember to put this in main...)
-	static bool seed_rand = true;
-	if( seed_rand )
-	{
-		seed_rand = false;
-		srand((unsigned int)time(NULL));
-	}
+	// static bool seed_rand = true;
+	// if( seed_rand )
+	// {
+		// seed_rand = false;
+		// srand((unsigned int)time(NULL));
+	// }
 	
 	//Determine the size of rand(). Can be different based on the computer (according to online sources)
 	//Sometimes 15 or 31. (Since rand() is never negative)
@@ -39,7 +44,8 @@ ull RandULL()
 	ull num = 0;
 	while( bytes_to_fill!=0 )
 	{
-		ull part = rand();
+		// ull part = rand();
+		ull part = myRand;
 		if( bytes_to_fill >= rand_size )
 		{
 			num = num | (part << (bytes_to_fill - rand_size));
@@ -165,8 +171,110 @@ void SpeckDecrypt(ull* plaintext, ull* ciphertext, ull* key)
 	delete [] expanded_key;
 }
 
+void testNums(int start, int end, int numTabs)
+{
+	for(int i = start; i < end; i++) {
+		ull plaintext[2];
+		plaintext[1] = 6774804475659383530;
+		plaintext[0] = 29508655;
+		
+		// srand((unsigned int)(i));
+		myRand = i;
+		ull* key = Generate256BitKey();
+
+		//Perform the encryption
+		ull ciphertext[2];
+		SpeckEncrypt(plaintext, ciphertext, key);
+
+		if(ciphertext[0] == 10472031575439205757ULL || ciphertext[0] == 3825009179541931757ULL
+			|| ciphertext[1] == 10472031575439205757ULL || ciphertext[1] == 3825009179541931757ULL) {
+			cout << "Success!" << endl
+				<< "key[0]: " << key[0] << endl
+				<< "key[1]: " << key[1] << endl
+				<< "key[2]: " << key[2] << endl
+				<< "key[3]: " << key[3] << endl << endl;
+			//Output in the base specified
+			printf("Hex:\t%llx %llx\n", ciphertext[1], ciphertext[0]);
+			printf("Decimel:\t%llu %llu\n", ciphertext[1], ciphertext[0]);
+			abort();
+		}
+
+		// cout << "testing " << (double)(i - startTime) / (double)(endTime - startTime) * 100.0 << "%\n";
+		for(int j = 0; j < numTabs; ++j) {
+			cout << "\t\t";
+		}
+		cerr << (double)i / RAND_MAX << "%\n";
+
+		delete[] key;
+	}
+}
+
 int main(int argc, const char * argv[])
 {
+	using namespace std::chrono;
+
+	int chunkSize = RAND_MAX / 4;
+	thread one {testNums, 0, chunkSize, 0};
+	thread two {testNums, chunkSize + 1, 2 * chunkSize, 1};
+	thread three {testNums, 2 * chunkSize + 1, 3 * chunkSize, 2};
+	thread four {testNums, 3 * chunkSize + 1, RAND_MAX, 3};
+
+	one.join();
+	two.join();
+	three.join();
+	four.join();
+
+	cerr << "Fuck, we found nothing " << endl;
+
+	// auto unix_timestamp = chrono::seconds(time(nullptr));
+	// system_clock::time_point now = system_clock::now();
+
+	// system_clock::duration dtn = now.time_since_epoch();
+	// auto endTime = dtn.count() * system_clock::period::num / system_clock::period::den;
+
+	// auto start = now - chrono::hours(24 * 16);
+	// system_clock::duration startDtn = start.time_since_epoch();
+	// auto startTime = startDtn.count() * system_clock::period::num / system_clock::period::den;
+
+	// cout << "start time in seconds:\t" << startTime << endl;
+	// cout << "end time in seconds:\t" << endTime << endl;
+	// return 0;
+
+	// for(unsigned long long i = startTime; i < endTime; ++i) {
+	// for(unsigned long long i = startTime; i < endTime; ++i) {
+	// for(int i = 0; i < RAND_MAX; i++) {
+	// 	ull plaintext[2];
+	// 	plaintext[1] = 6774804475659383530;
+	// 	plaintext[0] = 29508655;
+		
+	// 	// srand((unsigned int)(i));
+	// 	myRand = i;
+	// 	ull* key = Generate256BitKey();
+
+	// 	//Perform the encryption
+	// 	ull ciphertext[2];
+	// 	SpeckEncrypt(plaintext, ciphertext, key);
+
+	// 	if(ciphertext[0] == 10472031575439205757ULL || ciphertext[0] == 3825009179541931757ULL
+	// 		|| ciphertext[1] == 10472031575439205757ULL || ciphertext[1] == 3825009179541931757ULL) {
+	// 		cout << "Success!" << endl
+	// 			<< "key[0]: " << key[0] << endl
+	// 			<< "key[1]: " << key[1] << endl
+	// 			<< "key[2]: " << key[2] << endl
+	// 			<< "key[3]: " << key[3] << endl << endl;
+	// 		//Output in the base specified
+	// 		printf("Hex:\t%llx %llx\n", ciphertext[1], ciphertext[0]);
+	// 		printf("Decimel:\t%llu %llu\n", ciphertext[1], ciphertext[0]);
+	// 	}
+
+	// 	// cout << "testing " << (double)(i - startTime) / (double)(endTime - startTime) * 100.0 << "%\n";
+	// 	cout << (double)i / RAND_MAX << "%\n";
+
+	// 	delete[] key;
+	// }
+	
+	return 0;
+
 	//Determine which operations to perform based on program inputs
 	if( argc==2 && strcmp(argv[1], "test")==0 )
 	{
