@@ -4,9 +4,10 @@
 #include <time.h>
 #include <limits.h>
 #include <string.h>
-#include <chrono>
-#include <cstdlib>
 #include <thread>
+#include <iomanip>
+#include <future>
+#include <unistd.h>
 
 #define ull unsigned long long
 
@@ -23,17 +24,19 @@ struct Parameters
 	int rounds;
 };
 
-int myRand = 0;
+static thread_local unsigned int srand_seed;
+static thread_local bool seed_rand;
 
 ull RandULL()
 {
 	//Seed rand if required (Because I am too lazy to remember to put this in main...)
 	// static bool seed_rand = true;
-	// if( seed_rand )
-	// {
-		// seed_rand = false;
+	if( seed_rand )
+	{
+		seed_rand = false;
 		// srand((unsigned int)time(NULL));
-	// }
+		srand(srand_seed);
+	}
 	
 	//Determine the size of rand(). Can be different based on the computer (according to online sources)
 	//Sometimes 15 or 31. (Since rand() is never negative)
@@ -44,8 +47,7 @@ ull RandULL()
 	ull num = 0;
 	while( bytes_to_fill!=0 )
 	{
-		// ull part = rand();
-		ull part = myRand;
+		ull part = rand();
 		if( bytes_to_fill >= rand_size )
 		{
 			num = num | (part << (bytes_to_fill - rand_size));
@@ -171,108 +173,73 @@ void SpeckDecrypt(ull* plaintext, ull* ciphertext, ull* key)
 	delete [] expanded_key;
 }
 
-void testNums(int start, int end, int numTabs)
-{
-	for(int i = start; i < end; i++) {
-		ull plaintext[2];
-		plaintext[1] = 6774804475659383530;
-		plaintext[0] = 29508655;
-		
-		// srand((unsigned int)(i));
-		myRand = i;
+void test(unsigned int start, unsigned int end, int numTabs, promise<unsigned int>&& pr) {
+	cout << "Running test on interval [" << start << ", " << end << ')' << endl;
+	ull pt[2];
+	// pt[1] = 123;
+	// pt[0] = 321;
+	pt[1] = 1492;
+	pt[0] = 6789;
+	float pct = 0.0f;
+	for(srand_seed = start; srand_seed < end; ++srand_seed) {
+		seed_rand = true;
 		ull* key = Generate256BitKey();
+		ull ct[2];
+		SpeckEncrypt(pt, ct, key);
 
-		//Perform the encryption
-		ull ciphertext[2];
-		SpeckEncrypt(plaintext, ciphertext, key);
-
-		if(ciphertext[0] == 10472031575439205757ULL || ciphertext[0] == 3825009179541931757ULL
-			|| ciphertext[1] == 10472031575439205757ULL || ciphertext[1] == 3825009179541931757ULL) {
-			cout << "Success!" << endl
-				<< "key[0]: " << key[0] << endl
-				<< "key[1]: " << key[1] << endl
-				<< "key[2]: " << key[2] << endl
-				<< "key[3]: " << key[3] << endl << endl;
-			//Output in the base specified
-			printf("Hex:\t%llx %llx\n", ciphertext[1], ciphertext[0]);
-			printf("Decimel:\t%llu %llu\n", ciphertext[1], ciphertext[0]);
-			abort();
+		// if(ct[0] == 16290836081917361622ULL && ct[1] == 1644490542108440927ULL) {
+		if(ct[1] == 18415601473237741767ULL && ct[0] == 2527280999305784836ULL) {
+			cout << "=====================LOOK I FOUND IT=====================" << endl;
+			pr.set_value(srand_seed);
+			return;
 		}
-
-		// cout << "testing " << (double)(i - startTime) / (double)(endTime - startTime) * 100.0 << "%\n";
-		for(int j = 0; j < numTabs; ++j) {
-			cout << "\t\t";
+		float newPct = ((float)(srand_seed - start)) / (end - start);
+		// cout << newPct << endl;
+		if(newPct - pct > .001) {
+			for(int j = 0; j < numTabs; ++j) {
+				cout << '\t';
+			}
+			cout << newPct << endl;
+			pct = newPct;
 		}
-		cerr << (double)i / RAND_MAX << "%\n";
 
 		delete[] key;
 	}
+
+	pr.set_value(0);
+	return;
 }
+
+// myRand = 1337
+// key = 11484742554852 11484742554852 11484742554852 11484742554852
+// pt 1, 0 = 123 321
+// ct 1, 0 = 1644490542108440927 16290836081917361622
 
 int main(int argc, const char * argv[])
 {
-	using namespace std::chrono;
+	cout.precision(2);
 
-	int chunkSize = RAND_MAX / 4;
-	thread one {testNums, 0, chunkSize, 0};
-	thread two {testNums, chunkSize + 1, 2 * chunkSize, 1};
-	thread three {testNums, 2 * chunkSize + 1, 3 * chunkSize, 2};
-	thread four {testNums, 3 * chunkSize + 1, RAND_MAX, 3};
+	// srand_seed = 1398416033;
+	// seed_rand = true;
+	// promise<unsigned int> pr;
+	// test(srand_seed, srand_seed + 1, 1, move(pr));
 
-	one.join();
-	two.join();
-	three.join();
-	four.join();
-
-	cerr << "Fuck, we found nothing " << endl;
-
-	// auto unix_timestamp = chrono::seconds(time(nullptr));
-	// system_clock::time_point now = system_clock::now();
-
-	// system_clock::duration dtn = now.time_since_epoch();
-	// auto endTime = dtn.count() * system_clock::period::num / system_clock::period::den;
-
-	// auto start = now - chrono::hours(24 * 16);
-	// system_clock::duration startDtn = start.time_since_epoch();
-	// auto startTime = startDtn.count() * system_clock::period::num / system_clock::period::den;
-
-	// cout << "start time in seconds:\t" << startTime << endl;
-	// cout << "end time in seconds:\t" << endTime << endl;
-	// return 0;
-
-	// for(unsigned long long i = startTime; i < endTime; ++i) {
-	// for(unsigned long long i = startTime; i < endTime; ++i) {
-	// for(int i = 0; i < RAND_MAX; i++) {
-	// 	ull plaintext[2];
-	// 	plaintext[1] = 6774804475659383530;
-	// 	plaintext[0] = 29508655;
-		
-	// 	// srand((unsigned int)(i));
-	// 	myRand = i;
-	// 	ull* key = Generate256BitKey();
-
-	// 	//Perform the encryption
-	// 	ull ciphertext[2];
-	// 	SpeckEncrypt(plaintext, ciphertext, key);
-
-	// 	if(ciphertext[0] == 10472031575439205757ULL || ciphertext[0] == 3825009179541931757ULL
-	// 		|| ciphertext[1] == 10472031575439205757ULL || ciphertext[1] == 3825009179541931757ULL) {
-	// 		cout << "Success!" << endl
-	// 			<< "key[0]: " << key[0] << endl
-	// 			<< "key[1]: " << key[1] << endl
-	// 			<< "key[2]: " << key[2] << endl
-	// 			<< "key[3]: " << key[3] << endl << endl;
-	// 		//Output in the base specified
-	// 		printf("Hex:\t%llx %llx\n", ciphertext[1], ciphertext[0]);
-	// 		printf("Decimel:\t%llu %llu\n", ciphertext[1], ciphertext[0]);
-	// 	}
-
-	// 	// cout << "testing " << (double)(i - startTime) / (double)(endTime - startTime) * 100.0 << "%\n";
-	// 	cout << (double)i / RAND_MAX << "%\n";
-
-	// 	delete[] key;
-	// }
-	
+	vector<thread> threads (4);
+	const unsigned int kChunkSize = numeric_limits<unsigned int>::max() / threads.capacity();
+	vector<future<unsigned int>> futures (threads.capacity());
+	for(int i = 0; i < threads.capacity(); ++i) {
+		promise<unsigned int> pr;
+		futures[i] = pr.get_future();
+		threads[i] = thread{test, i * kChunkSize, (i + 1) * kChunkSize, i, move(pr)};
+		sleep(1);
+	}
+	for(int i = 0; i < threads.capacity(); ++i) {
+		threads[i].join();
+		unsigned int randVal = futures[i].get();
+		if(randVal) {
+			cout << "Key was generated when myRand = " << randVal << endl;
+		}
+	}
 	return 0;
 
 	//Determine which operations to perform based on program inputs

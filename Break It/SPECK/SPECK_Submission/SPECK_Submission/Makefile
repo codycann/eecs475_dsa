@@ -1,5 +1,5 @@
 PRODUCTS = proj
-CFLAGS = -O3 -std=c++11 -pthread -Wl,--no-as-needed
+CFLAGS = -Wall -O3 -pthread -Wl,--no-as-needed -std=c++11
 OBJ = SPECK128_256.o
 
 all: $(OBJ)
